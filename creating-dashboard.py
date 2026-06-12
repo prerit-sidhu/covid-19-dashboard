@@ -5,7 +5,7 @@ import streamlit as st
 
 # Enhanced Streamlit App Configuration
 st.set_page_config(
-    page_title="🌍 COVID-19 Global Analytics Dashboard", 
+    page_title="COVID-19 Global Analytics Dashboard", 
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -126,18 +126,18 @@ st.markdown("""
 # Enhanced Header
 st.markdown("""
 <div class="main-header">
-    <h1 class="main-title">🌍 COVID-19 Global Analytics Dashboard</h1>
+    <h1 class="main-title">COVID-19 Global Analytics Dashboard</h1>
     <p class="subtitle">Real-time insights and trends from around the world</p>
 </div>
 """, unsafe_allow_html=True)
 
 # Sidebar for controls
 with st.sidebar:
-    st.markdown("### 🎛️ Dashboard Controls")
+    st.markdown("### Dashboard Controls")
     
     countries = df['location'].dropna().unique()
     country = st.selectbox(
-        "🌍 Select a Country",
+        "Select a Country",
         sorted(countries),
         help="Choose a country to analyze COVID-19 data"
     )
@@ -146,14 +146,14 @@ with st.sidebar:
     max_date = df['date'].max()
     
     date_range = st.date_input(
-        "📅 Select Date Range",
+        "Select Date Range",
         value=(min_date, max_date),
         min_value=min_date,
         max_value=max_date
     )
     
     st.markdown("---")
-    st.markdown("### 📊 Visualization Options")
+    st.markdown("### Visualization Options")
     show_trends = st.checkbox("Show trend lines", True)
     show_moving_avg = st.checkbox("Show moving averages", False)
 
@@ -184,7 +184,7 @@ if not filtered_df.empty:
         vaccination_rate = (latest_data['people_vaccinated'] / latest_data['population']) * 100
 
 # Tabs Layout
-tab1, tab2, tab3 = st.tabs(["📊 Executive Overview", "📈 Deep Dive Trends", "🏛️ Policy & Demographics"])
+tab1, tab2, tab3 = st.tabs(["Executive Overview", "Deep Dive Trends", "Policy & Demographics"])
 
 # ==========================================
 # TAB 1: EXECUTIVE OVERVIEW
@@ -194,13 +194,13 @@ with tab1:
         # Key Metrics Cards
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            st.markdown(f'<div class="metric-card"><h3>📈 Total Cases</h3><h2>{latest_data.get("total_cases", 0):,.0f}</h2></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-card"><h3>Total Cases</h3><h2>{latest_data.get("total_cases", 0):,.0f}</h2></div>', unsafe_allow_html=True)
         with col2:
-            st.markdown(f'<div class="metric-card"><h3>💔 Total Deaths</h3><h2>{latest_data.get("total_deaths", 0):,.0f}</h2></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-card"><h3>Total Deaths</h3><h2>{latest_data.get("total_deaths", 0):,.0f}</h2></div>', unsafe_allow_html=True)
         with col3:
-            st.markdown(f'<div class="metric-card"><h3>🆕 New Cases</h3><h2>{latest_data.get("new_cases", 0):,.0f}</h2></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-card"><h3>New Cases</h3><h2>{latest_data.get("new_cases", 0):,.0f}</h2></div>', unsafe_allow_html=True)
         with col4:
-            st.markdown(f'<div class="metric-card"><h3>💉 Vaccination Rate</h3><h2>{vaccination_rate:.1f}%</h2></div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-card"><h3>Vaccination Rate</h3><h2>{vaccination_rate:.1f}%</h2></div>', unsafe_allow_html=True)
 
         st.markdown("<br>", unsafe_allow_html=True)
         
@@ -289,7 +289,7 @@ with tab2:
         fig_daily.update_yaxes(**axes_kwargs)
         st.plotly_chart(fig_daily, use_container_width=True)
 
-        st.markdown('<div class="section-header">⚠️ Case Fatality Rate Over Time</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Case Fatality Rate Over Time</div>', unsafe_allow_html=True)
         filtered_df_copy = filtered_df.copy()
         filtered_df_copy['cfr'] = (filtered_df_copy['total_deaths'] / filtered_df_copy['total_cases'].replace(0, pd.NA)) * 100
         
@@ -312,7 +312,7 @@ with tab2:
 # ==========================================
 with tab3:
     if not filtered_df.empty:
-        st.markdown('<div class="section-header">🌍 Country Profile</div>', unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Country Profile</div>', unsafe_allow_html=True)
         
         latest = filtered_df.dropna(subset=['median_age', 'population_density', 'gdp_per_capita']).iloc[-1] if len(filtered_df.dropna(subset=['median_age', 'population_density', 'gdp_per_capita'])) > 0 else None
         
@@ -320,14 +320,14 @@ with tab3:
             c1, c2, c3, c4 = st.columns(4)
             card_style = """
             <div style="background: rgba(17, 34, 64, 0.8); backdrop-filter: blur(10px); padding: 1.5rem; border-radius: 15px; border: 1px solid #4facfe; text-align: center; margin: 0.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                <h4 style="color: #8892B0; margin-bottom: 0.5rem;">{icon} {title}</h4>
+                <h4 style="color: #8892B0; margin-bottom: 0.5rem;">{title}</h4>
                 <h2 style="color: #4facfe; font-size: 2rem; margin: 0;">{value}</h2>
             </div>
             """
-            with c1: st.markdown(card_style.format(icon="👥", title="Median Age", value=f"{latest.get('median_age', 0):.1f} yrs"), unsafe_allow_html=True)
-            with c2: st.markdown(card_style.format(icon="🏘️", title="Pop. Density", value=f"{latest.get('population_density', 0):.1f}/km²"), unsafe_allow_html=True)
-            with c3: st.markdown(card_style.format(icon="💰", title="GDP per Capita", value=f"${latest.get('gdp_per_capita', 0):,.0f}"), unsafe_allow_html=True)
-            with c4: st.markdown(card_style.format(icon="📊", title="HDI", value=f"{latest.get('human_development_index', 0):.3f}"), unsafe_allow_html=True)
+            with c1: st.markdown(card_style.format(title="Median Age", value=f"{latest.get('median_age', 0):.1f} yrs"), unsafe_allow_html=True)
+            with c2: st.markdown(card_style.format(title="Pop. Density", value=f"{latest.get('population_density', 0):.1f}/km²"), unsafe_allow_html=True)
+            with c3: st.markdown(card_style.format(title="GDP per Capita", value=f"${latest.get('gdp_per_capita', 0):,.0f}"), unsafe_allow_html=True)
+            with c4: st.markdown(card_style.format(title="HDI", value=f"{latest.get('human_development_index', 0):.3f}"), unsafe_allow_html=True)
         
         st.markdown("<br>", unsafe_allow_html=True)
         col_policy_left, col_policy_right = st.columns(2)
@@ -366,7 +366,7 @@ with tab3:
 st.markdown("---")
 st.markdown("""
 <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #112240 0%, #0A192F 100%); border-radius: 15px; margin-top: 2rem; border: 1px solid #FFD700; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-    <h3 style="color: #FFD700; margin-bottom: 1rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);">🚀 Built with Modern Technologies</h3>
+    <h3 style="color: #FFD700; margin-bottom: 1rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);">Built with Modern Technologies</h3>
     <p style="color: #E6F1FF; font-size: 1.1rem;">
         Powered by <strong style="color: #4facfe;">Streamlit</strong> & <strong style="color: #4facfe;">Plotly</strong> | 
         Data visualization that tells a story | 
