@@ -372,8 +372,5 @@ st.markdown("""
         Data visualization that tells a story | 
         Real-time COVID-19 analytics
     </p>
-    <p style="color: #8892B0; margin-top: 1rem;">
-        Redesigned with a stunning Gold and Blue aesthetic
-    </p>
 </div>
 """, unsafe_allow_html=True)
